@@ -20,10 +20,10 @@ hostname_dns() {
 	echo " Hostname and DNS information"
 	echo "$DASH"
 	echo "Hostname: $(hostname)"
-	echo "DNS domain : "
+	echo "DNS domain : $(hostname -d)"
 	echo "Fully qualified domain name : $(hostname --fqdn)"
-	echo "Nework address (IP) : "
-	echo "DNS name servers (DNS IP) : "
+	echo "Network address (IP) : $(ip address | grep -w 127)"
+	echo "DNS name servers (DNS IP) : $(grep nameserver /etc/resolv.conf)"
 	read -p 'Press [Enter] key to continue...' Val
 	echo
 }
@@ -32,7 +32,9 @@ network_info() {
 	echo "$DASH"
 	echo " Network Information"
 	echo "$DASH"
-	echo 
+	echo "Total network interfaces found: $(ls -A /sys/class/net/ | wc -l)"
+	echo "*** IP Addresses Informatioin ***"
+	echo "$(ip address | grep -v link)"
 	echo $'***********************\n*** Network routing ***\n***********************'
 	echo "$(netstat -r)"
 	echo $'*************************************\n*** Interface traffic information ***\n*************************************'
@@ -94,9 +96,40 @@ process_op() {
 	echo "$DASH"
 	echo "Process Operations"
 	echo "$DASH"
-	read -p 'Press [Enter] key to continue...' Val
+	echo $'(please enter the number of your selection below)\n'
+	
+	I=0
+	Submenu=$'1. Show all processes\n2. Kill a process\n3. Bring up top\n4. Return to Main Menu'
+	while [ $I -ne 4 ]
+	do
+		echo "$Submenu"
+		echo
+		read -p "" I
+		
+		case $I in
+			1)
+			ps -efj
+			#ps -efj | awk '{print $1, $2, $3, $6, $7, $8, $9, $10}';;
+			echo ;;
+			2)
+			echo "Please enter the PID of the process you would like to kill:" 
+			read -p "" pid
+			kill -9 $pid
+			echo "Killed: $pid" ;;
+			3)
+			#echo $(top)
+			top 
+			echo ;;
+			#echo "made it after" ;;
+		esac
+	done
+	
+	
+	
+	#read -p 'Press [Enter] key to continue...' Val
 	echo
 }
+
 
 #echo "First Arg: $1"
 

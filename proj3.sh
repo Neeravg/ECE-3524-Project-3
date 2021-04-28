@@ -17,7 +17,8 @@ do
 	then
 		./proc.sh "$I"
 	else
-		echo $'Invalid Input\n\n'
+		echo ""
+		#echo $'Invalid Input\n\n'
 	fi
 
 
