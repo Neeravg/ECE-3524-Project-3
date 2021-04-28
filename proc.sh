@@ -36,8 +36,6 @@ process_op() {
 		esac
 	done
 	
-	
-	
 	#read -p 'Press [Enter] key to continue...' Val
 	echo
 }
